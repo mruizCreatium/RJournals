@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="JournalApp.Views.ResearchersPage"
+             Title="{Binding Title}"
+             xmlns:local="clr-namespace:JournalApp.ViewModels"  
+             xmlns:model="clr-namespace:JournalModels;assembly=JournalModels"
+             xmlns:Helpers="clr-namespace:JournalApp.Converters"
+             x:Name="Researchers">
+
+    <RefreshView x:DataType="local:ResearchersViewModel" Command="{Binding LoadSubscriptionsCommand}" IsRefreshing="{Binding IsBusy}">
+        <CollectionView x:Name="ItemsListView"
+                ItemsSource="{Binding Researchers}"
+                SelectionMode="None"
+                WidthRequest="640"
+                Margin="0,50,0,0"
+                HorizontalOptions="Center">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" SnapPointsAlignment="End" SnapPointsType="Mandatory"></LinearItemsLayout>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10" x:DataType="model:Researcher" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="95"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="140"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" WidthRequest="75" HeightRequest="75" HorizontalOptions="Start" VerticalOptions="Start" Margin="10,0,0,0"  Aspect="AspectFill" Source="{Binding PictureFullUrl}"  BackgroundColor="#c3c3c3"/>
+                        <StackLayout Grid.Column="1" Spacing="0">
+
+                            <Label Text="{Binding ResearchArea}" 
+                                LineBreakMode="NoWrap"
+                                Style="{DynamicResource ListItemDetailTextStyle}"
+                                FontSize="13" />
+                            <Label Text="{Binding Name}" 
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemTextStyle}" 
+                                FontSize="18" />
+                            <Label Text="{Binding Institution}" 
+                                LineBreakMode="NoWrap"
+                                Style="{DynamicResource ListItemDetailTextStyle}"
+                                FontSize="16" />
+
+                        </StackLayout>
+                        <StackLayout Grid.Column="2" IsVisible="{Binding Id, Converter={Helpers:IsNotCurrentResearcherConverter}}">
+                            <Button Text="Subscribe" VerticalOptions="Center" IsVisible="{Binding Subscribed, Converter={Helpers:InverseBoolConverter}}" Command="{Binding Source={RelativeSource AncestorType={x:Type local:ResearchersViewModel}}, Path=AddSubscriptionCommand}"		
+                                    CommandParameter="{Binding .}">
+
+                            </Button>
+
+                            <Button Text="Unsubscribe" VerticalOptions="Center" IsVisible="{Binding Subscribed}" Command="{Binding Source={RelativeSource AncestorType={x:Type local:ResearchersViewModel}}, Path=RemoveSubscriptionCommand}"		
+                                    CommandParameter="{Binding .}">
+
+                            </Button>
+                        </StackLayout>
+                        <Line Grid.Row="1" Grid.ColumnSpan="3" HorizontalOptions="Fill" BackgroundColor="#c3c3c3" HeightRequest="1" Margin="0,9,0,0"></Line>
+                    </Grid>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

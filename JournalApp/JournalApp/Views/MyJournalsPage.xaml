@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="JournalApp.Views.MyJournals"
+             Title="{Binding Title}"
+             xmlns:local="clr-namespace:JournalApp.ViewModels"  
+             xmlns:model="clr-namespace:JournalModels;assembly=JournalModels"  
+             x:Name="MyJournalsPage">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add" Command="{Binding AddJournalCommand}" />
+    </ContentPage.ToolbarItems>
+    <!--
+      x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
+      https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
+    -->
+    <RefreshView x:DataType="local:MyJournalsViewModel" Command="{Binding LoadJournalsCommand}" IsRefreshing="{Binding IsBusy}">
+        <CollectionView x:Name="ItemsListView"
+                ItemsSource="{Binding Journals}"
+                SelectionMode="None"
+                WidthRequest="640"
+                Margin="0,50,0,0"
+                HorizontalOptions="Center">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" SnapPointsAlignment="End" SnapPointsType="Mandatory" ItemSpacing="10"></LinearItemsLayout>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10" x:DataType="model:Journal" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="140"/>
+                        </Grid.ColumnDefinitions>
+                        <StackLayout Grid.Column="0">
+                            <Label Text="{Binding Title}" 
+                                LineBreakMode="WordWrap"
+                                Style="{DynamicResource ListItemTextStyle}"
+                                FontSize="18" />
+                            <Label Text="{Binding PostDate}" 
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemDetailTextStyle}" 
+                                FontSize="13" />
+                        </StackLayout>
+                        <Button Grid.Column="1" Text="Read now" VerticalOptions="Center" Command="{Binding Source={RelativeSource AncestorType={x:Type local:MyJournalsViewModel}}, Path=JournalTapped}"		
+                                CommandParameter="{Binding .}">
+
+                        </Button>
+                        <Line Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="Fill" BackgroundColor="#c3c3c3" HeightRequest="1" Margin="0,9,0,0"></Line>
+                    </Grid>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

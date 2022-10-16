@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="JournalApp.Views.NewJournalPage"
+             xmlns:local="clr-namespace:JournalApp.ViewModels"  
+             Shell.PresentationMode="ModalAnimated"
+             Title="New Journal"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true">
+    <ContentPage.Content>
+        <Grid WidthRequest="640">
+            <StackLayout Spacing="3" Padding="15" 
+                     HorizontalOptions="Center"
+                     WidthRequest="640" 
+                     x:DataType="local:NewJournalViewModel">
+                <Label Text="New journal" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,30,0,40" />
+
+                <Label Text="Title" FontSize="16" />
+                <Entry Text="{Binding JournalTitle, Mode=TwoWay}" FontSize="Medium" />
+                <Label Text="PDF file" FontSize="16" Margin="0,10,0,0"/>
+
+                <Button Text="Pick file" Command="{Binding PickFileCommand}" WidthRequest="200" HorizontalOptions="Start"></Button>
+                <Label Text="{Binding FileName}" FontSize="13" HorizontalOptions="Start"/>
+                <Label Text="{Binding FileName}" FontSize="13" HorizontalOptions="Start"/>
+
+
+
+                <Line HorizontalOptions="Fill" BackgroundColor="#c3c3c3" HeightRequest="1" Margin="0,30,0,0"></Line>
+                <StackLayout Orientation="Horizontal" Margin="0,30,0,0" Padding="20,0" Spacing="40" HorizontalOptions="End">
+                    <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="Center" WidthRequest="100"></Button>
+                    <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="Center" WidthRequest="100"></Button>
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+
+</ContentPage>
